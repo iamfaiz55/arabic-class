@@ -1,0 +1,37 @@
+{
+  "name": "class-management-server",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "nodemon server.ts",
+    "start": "ts-node server.ts",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@types/morgan": "^1.9.10",
+    "bcryptjs": "latest",
+    "cloudinary": "latest",
+    "cors": "latest",
+    "dotenv": "latest",
+    "express": "latest",
+    "express-async-handler": "latest",
+    "helmet": "latest",
+    "jsonwebtoken": "latest",
+    "mongoose": "latest",
+    "morgan": "^1.10.1",
+    "multer": "latest",
+    "passport": "latest",
+    "passport-jwt": "latest"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "latest",
+    "@types/cors": "latest",
+    "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "latest",
+    "@types/multer": "latest",
+    "@types/passport": "latest",
+    "@types/passport-jwt": "latest",
+    "nodemon": "latest",
+    "ts-node": "latest",
+    "typescript": "latest"
+  }
+}
