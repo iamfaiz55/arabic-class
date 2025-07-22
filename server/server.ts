@@ -38,6 +38,9 @@ app.use('/api/classes', classRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
+app.use((_, res)=> {
+   res.status(404).json({message:"Resource Not Found"})
+})
 // Database connection
 mongoose.connect(process.env.MONGODB_URI as string)
   .then(() => {
