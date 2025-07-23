@@ -28,14 +28,14 @@ const AppContent: React.FC = () => {
       <Routes>
         <Route
           path="/login"
-          element={user ? <Navigate to="/dashboard" /> : <LoginForm />}
+          element={user ? <Navigate to="/" /> : <LoginForm />}
         />
         <Route
           path="/register"
-          element={user ? <Navigate to="/dashboard" /> : <RegisterForm />}
+          element={user ? <Navigate to="/" /> : <RegisterForm />}
         />
         <Route
-          path="/dashboard"
+          path="/"
           element={user ? <Dashboard /> : <Navigate to="/login" />}
         />
         <Route

@@ -80,7 +80,7 @@ export const ClassDetail: React.FC = () => {
     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
       <div className="flex items-center gap-3">
         <button
-          onClick={() => navigate('/dashboard')}
+          onClick={() => navigate('/')}
           className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-md transition"
         >
           <ArrowLeft className="w-5 h-5" />

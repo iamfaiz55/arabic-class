@@ -19,7 +19,7 @@ mongoose.connect(process.env.MONGODB_URI as string)
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: '*',
+ origin: ['http://localhost:5173', 'https://334944620a2f.ngrok-free.app', 'https://your-frontend.vercel.app'],
   credentials: true
 }));
 app.use(morgan('combined'));

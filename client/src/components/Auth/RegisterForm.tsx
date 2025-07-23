@@ -24,7 +24,7 @@ export const RegisterForm: React.FC = () => {
     try {
       await register({ name, email, password }).unwrap();
       // dispatch(setCredentials({ user: result, token: result.token }));
-      navigate('/dashboard');
+      navigate('/');
     } catch (err) {
       console.error('Registration failed:', err);
     }

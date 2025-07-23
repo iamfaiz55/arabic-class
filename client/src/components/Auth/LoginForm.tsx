@@ -17,7 +17,7 @@ export const LoginForm: React.FC = () => {
     try {
        await login({ email, password }).unwrap();
       // dispatch(setCredentials({ user: result, token: result.token }));
-      navigate('/dashboard');
+      navigate('/');
     } catch (err) {
       console.error('Login failed:', err);
     }
