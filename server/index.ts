@@ -19,7 +19,7 @@ mongoose.connect(process.env.MONGODB_URI as string)
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: 'https://multi-class-managemnt.vercel.app/',
+  origin: true,
   credentials: true
 }));
 app.use(morgan('combined'));
