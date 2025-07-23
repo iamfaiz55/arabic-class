@@ -85,12 +85,7 @@ export const classApi = createApi({
     }),
     createDailyEntry: builder.mutation<DailyEntry, { classId: string; data: FormData }>({
       query: ({ classId, data }) => {
-        // const formData = new FormData();
-        // formData.append('date', data.date);
-        // formData.append('topic', data.topic);
-        // if (data.audio) {
-        //   formData.append('audio', data.audio);
-        // }
+
         
         return {
           url: `/${classId}/entries`,

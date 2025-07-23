@@ -260,8 +260,7 @@ const handleClose = () => {
 
           {error && (
             <div className="mt-4 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md text-sm">
-              {(error as any)?.data?.message || 'Failed to create daily entry. Please try again.'}
-              {JSON.stringify(error, null, 2)}
+              {(error as any)?.data?.message || 'Failed to create daily entry. Please try again.', error}
             </div>
           )}
 
