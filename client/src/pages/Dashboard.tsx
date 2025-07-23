@@ -51,57 +51,58 @@ export const Dashboard: React.FC = () => {
   }
 
   return (
-    <Layout>
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">My Classes</h1>
-            <p className="mt-2 text-gray-600">
-              Manage your classes and daily entries
-            </p>
-          </div>
-          <button
-            onClick={() => setIsCreateModalOpen(true)}
-            className="flex items-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors"
-          >
-            <Plus className="w-5 h-5" />
-            <span>New Class</span>
-          </button>
-        </div>
-
-        {classes && classes.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {classes.map((classItem) => (
-              <ClassCard
-                key={classItem._id}
-                classItem={classItem}
-                onView={handleViewClass}
-                onDelete={handleDeleteClass}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <BookOpen className="mx-auto h-16 w-16 text-gray-400 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No classes yet</h3>
-            <p className="text-gray-600 mb-6">
-              Get started by creating your first class
-            </p>
-            <button
-              onClick={() => setIsCreateModalOpen(true)}
-              className="inline-flex items-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors"
-            >
-              <Plus className="w-5 h-5" />
-              <span>Create Your First Class</span>
-            </button>
-          </div>
-        )}
-
-        <CreateClassModal
-          isOpen={isCreateModalOpen}
-          onClose={() => setIsCreateModalOpen(false)}
-        />
+  <Layout>
+  <div className="space-y-6 px-4 sm:px-6 lg:px-8 py-6">
+    {/* Header */}
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">My Classes</h1>
+        <p className="mt-1 text-sm text-gray-600">Manage your classes and daily entries</p>
       </div>
-    </Layout>
+      <button
+        onClick={() => setIsCreateModalOpen(true)}
+        className="w-full sm:w-auto flex items-center justify-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition"
+      >
+        <Plus className="w-5 h-5" />
+        <span>New Class</span>
+      </button>
+    </div>
+
+    {/* Class Grid */}
+    {classes && classes.length > 0 ? (
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        {classes.map((classItem) => (
+          <ClassCard
+            key={classItem._id}
+            classItem={classItem}
+            onView={handleViewClass}
+            onDelete={handleDeleteClass}
+          />
+        ))}
+      </div>
+    ) : (
+      <div className="text-center py-12 px-4">
+        <BookOpen className="mx-auto h-16 w-16 text-gray-400 mb-4" />
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">No classes yet</h3>
+        <p className="text-gray-600 text-sm mb-6">
+          Get started by creating your first class
+        </p>
+        <button
+          onClick={() => setIsCreateModalOpen(true)}
+          className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition"
+        >
+          <Plus className="w-5 h-5" />
+          <span>Create Your First Class</span>
+        </button>
+      </div>
+    )}
+
+    <CreateClassModal
+      isOpen={isCreateModalOpen}
+      onClose={() => setIsCreateModalOpen(false)}
+    />
+  </div>
+</Layout>
+
   );
 };

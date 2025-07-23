@@ -15,106 +15,106 @@ export const CreateDailyEntryModal: React.FC<CreateDailyEntryModalProps> = ({
 }) => {
   const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [topic, setTopic] = useState('');
-  const [audioFile, setAudioFile] = useState<File | null>(null);
-  const [isRecording, setIsRecording] = useState(false);
-  const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+const [audioFile1, setAudioFile1] = useState<File | null>(null);
+const [audioFile2, setAudioFile2] = useState<File | null>(null);
+  // const [isRecording, setIsRecording] = useState(false);
+  // const [recordedBlob, setRecordedBlob] = useState<Blob | null>(null);
+  // const [isPlaying, setIsPlaying] = useState(false);
   const [createDailyEntry, { isLoading, error }] = useCreateDailyEntryMutation();
   
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  // const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+const fileInputRef2 = useRef<HTMLInputElement | null>(null);
 
-  const startRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorderRef.current = mediaRecorder;
+  // const startRecording = async () => {
+  //   try {
+  //     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  //     const mediaRecorder = new MediaRecorder(stream);
+  //     mediaRecorderRef.current = mediaRecorder;
       
-      const chunks: BlobPart[] = [];
-      mediaRecorder.ondataavailable = (event) => {
-        chunks.push(event.data);
-      };
+  //     const chunks: BlobPart[] = [];
+  //     mediaRecorder.ondataavailable = (event) => {
+  //       chunks.push(event.data);
+  //     };
       
-      mediaRecorder.onstop = () => {
-        const blob = new Blob(chunks, { type: 'audio/wav' });
-        setRecordedBlob(blob);
-        setAudioFile(new File([blob], `recording_${Date.now()}.wav`, { type: 'audio/wav' }));
-        stream.getTracks().forEach(track => track.stop());
-      };
+  //     mediaRecorder.onstop = () => {
+  //       const blob = new Blob(chunks, { type: 'audio/wav' });
+  //       setRecordedBlob(blob);
+  //       setAudioFile(new File([blob], `recording_${Date.now()}.wav`, { type: 'audio/wav' }));
+  //       stream.getTracks().forEach(track => track.stop());
+  //     };
       
-      mediaRecorder.start();
-      setIsRecording(true);
-    } catch (error) {
-      console.error('Error starting recording:', error);
-      alert('Could not access microphone. Please check permissions.');
-    }
-  };
+  //     mediaRecorder.start();
+  //     setIsRecording(true);
+  //   } catch (error) {
+  //     console.error('Error starting recording:', error);
+  //     alert('Could not access microphone. Please check permissions.');
+  //   }
+  // };
 
-  const stopRecording = () => {
-    if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop();
-      setIsRecording(false);
-    }
-  };
+  // const stopRecording = () => {
+  //   if (mediaRecorderRef.current && isRecording) {
+  //     mediaRecorderRef.current.stop();
+  //     setIsRecording(false);
+  //   }
+  // };
 
-  const playRecording = () => {
-    if (recordedBlob && audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-        setIsPlaying(false);
-      } else {
-        audioRef.current.src = URL.createObjectURL(recordedBlob);
-        audioRef.current.play();
-        setIsPlaying(true);
-      }
-    }
-  };
+  // const playRecording = () => {
+  //   if (recordedBlob && audioRef.current) {
+  //     if (isPlaying) {
+  //       audioRef.current.pause();
+  //       setIsPlaying(false);
+  //     } else {
+  //       audioRef.current.src = URL.createObjectURL(recordedBlob);
+  //       audioRef.current.play();
+  //       setIsPlaying(true);
+  //     }
+  //   }
+  // };
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      if (file.size > 15 * 1024 * 1024) {
-        alert('File size must be less than 15MB');
-        return;
-      }
-      setAudioFile(file);
-      setRecordedBlob(null);
-    }
-  };
+const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (file) setAudioFile1(file);
+};
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await createDailyEntry({
-        classId,
-        data: {
-          date,
-          topic,
-          audio: audioFile || undefined,
-        },
-      }).unwrap();
-      
-      // Reset form
-      setDate(new Date().toISOString().split('T')[0]);
-      setTopic('');
-      setAudioFile(null);
-      setRecordedBlob(null);
-      onClose();
-    } catch (err) {
-      console.error('Failed to create daily entry:', err);
-    }
-  };
+const handleFileUpload2 = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const file = e.target.files?.[0];
+  if (file) setAudioFile2(file);
+};
 
-  const handleClose = () => {
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  const formData = new FormData();
+  formData.append('date', date);
+  formData.append('topic', topic);
+  if (audioFile1) formData.append('audio1', audioFile1);
+  if (audioFile2) formData.append('audio2', audioFile2);
+
+  try {
+await createDailyEntry({ classId, data: formData }).unwrap();
     setDate(new Date().toISOString().split('T')[0]);
     setTopic('');
-    setAudioFile(null);
-    setRecordedBlob(null);
-    setIsRecording(false);
-    setIsPlaying(false);
+    setAudioFile1(null);
+    setAudioFile2(null);
+    // setRecordedBlob(null);
     onClose();
-  };
+  } catch (err) {
+    console.error('Failed to create daily entry:', err);
+  }
+};
+
+
+const handleClose = () => {
+  setDate(new Date().toISOString().split('T')[0]);
+  setTopic('');
+  setAudioFile1(null);        // reset first audio file
+  setAudioFile2(null);        // reset second audio file
+
+  onClose();
+};
+
 
   if (!isOpen) return null;
 
@@ -174,36 +174,12 @@ export const CreateDailyEntryModal: React.FC<CreateDailyEntryModalProps> = ({
             
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-3">
-                Audio Recording (Optional)
+                Audio Recording Grammer(Optional)
               </label>
               
               <div className="space-y-4">
                 {/* Recording Controls */}
-                <div className="flex items-center space-x-3">
-                  <button
-                    type="button"
-                    onClick={isRecording ? stopRecording : startRecording}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                      isRecording
-                        ? 'bg-red-100 text-red-700 hover:bg-red-200'
-                        : 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200'
-                    }`}
-                  >
-                    {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-                    <span>{isRecording ? 'Stop Recording' : 'Start Recording'}</span>
-                  </button>
-                  
-                  {recordedBlob && (
-                    <button
-                      type="button"
-                      onClick={playRecording}
-                      className="flex items-center space-x-2 px-4 py-2 bg-blue-100 text-blue-700 hover:bg-blue-200 rounded-md text-sm font-medium transition-colors"
-                    >
-                      {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-                      <span>{isPlaying ? 'Pause' : 'Play'}</span>
-                    </button>
-                  )}
-                </div>
+               
                 
                 {/* File Upload */}
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
@@ -230,16 +206,54 @@ export const CreateDailyEntryModal: React.FC<CreateDailyEntryModalProps> = ({
                   />
                 </div>
                 
-                {audioFile && (
+                {audioFile1 && (
                   <div className="bg-gray-50 p-3 rounded-md">
                     <p className="text-sm text-gray-700">
-                      <strong>Selected:</strong> {audioFile.name}
+                      <strong>Selected:</strong> {audioFile1.name}
                     </p>
                     <p className="text-xs text-gray-500">
-                      Size: {(audioFile.size / (1024 * 1024)).toFixed(2)} MB
+                      Size: {(audioFile1.size / (1024 * 1024)).toFixed(2)} MB
                     </p>
                   </div>
                 )}
+
+                <div>
+  <label className="block text-sm font-medium text-gray-700 mb-3">
+    Additional Audio File Dars (Optional)
+  </label>
+  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4">
+    <div className="text-center">
+      <Upload className="mx-auto h-8 w-8 text-gray-400" />
+      <button
+        type="button"
+        onClick={() => fileInputRef2.current?.click()}
+        className="text-indigo-600 hover:text-indigo-500 font-medium"
+      >
+        Upload second audio file
+      </button>
+      <p className="text-xs text-gray-400 mt-1">MP3, WAV, OGG up to 15MB</p>
+    </div>
+    <input
+      type="file"
+      accept="audio/*"
+      onChange={handleFileUpload2}
+      ref={fileInputRef2}
+      className="hidden"
+    />
+  </div>
+
+  {audioFile2 && (
+    <div className="bg-gray-50 p-3 rounded-md mt-2">
+      <p className="text-sm text-gray-700">
+        <strong>Selected:</strong> {audioFile2.name}
+      </p>
+      <p className="text-xs text-gray-500">
+        Size: {(audioFile2.size / (1024 * 1024)).toFixed(2)} MB
+      </p>
+    </div>
+  )}
+</div>
+
               </div>
             </div>
           </div>
@@ -268,11 +282,11 @@ export const CreateDailyEntryModal: React.FC<CreateDailyEntryModalProps> = ({
           </div>
         </form>
         
-        <audio
+        {/* <audio
           ref={audioRef}
           onEnded={() => setIsPlaying(false)}
           className="hidden"
-        />
+        /> */}
       </div>
     </div>
   );

@@ -15,7 +15,8 @@ interface DailyEntry {
   classId: string;
   date: string;
   topic: string;
-  audioUrl?: string;
+    audio1?: File;
+  audio2?: File;
   audioPublicId?: string;
   createdAt: string;
   updatedAt: string;
@@ -35,7 +36,8 @@ interface CreateDailyEntryRequest {
 export const classApi = createApi({
   reducerPath: 'classApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:5000/api/classes',
+    // baseUrl: 'http://localhost:5000/api/classes',
+    baseUrl: `${import.meta.env.VITE_BACKEND_URL}/classes`,
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {
@@ -81,19 +83,19 @@ export const classApi = createApi({
       query: (classId) => `/${classId}/entries`,
       providesTags: (result, error, classId) => [{ type: 'DailyEntry', id: classId }],
     }),
-    createDailyEntry: builder.mutation<DailyEntry, { classId: string; data: CreateDailyEntryRequest }>({
+    createDailyEntry: builder.mutation<DailyEntry, { classId: string; data: FormData }>({
       query: ({ classId, data }) => {
-        const formData = new FormData();
-        formData.append('date', data.date);
-        formData.append('topic', data.topic);
-        if (data.audio) {
-          formData.append('audio', data.audio);
-        }
+        // const formData = new FormData();
+        // formData.append('date', data.date);
+        // formData.append('topic', data.topic);
+        // if (data.audio) {
+        //   formData.append('audio', data.audio);
+        // }
         
         return {
           url: `/${classId}/entries`,
           method: 'POST',
-          body: formData,
+          body: data,
         };
       },
       invalidatesTags: (result, error, { classId }) => [{ type: 'DailyEntry', id: classId }],

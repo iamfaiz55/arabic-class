@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { RootState } from './store';
+import { Meta } from 'react-router-dom';
 
 interface User {
   _id: string;
@@ -28,7 +29,8 @@ interface RegisterRequest {
 export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:5000/api/auth',
+    // baseUrl: 'http://localhost:5000/api/auth',
+    baseUrl: `${import.meta.env.VITE_BACKEND_URL}/auth`,
     prepareHeaders: (headers, { getState }) => {
       const token = (getState() as RootState).auth.token;
       if (token) {

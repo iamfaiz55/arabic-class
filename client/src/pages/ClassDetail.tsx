@@ -74,78 +74,85 @@ export const ClassDetail: React.FC = () => {
   }
 
   return (
-    <Layout>
-      <div className="space-y-6">
-        <div className="flex items-center space-x-4">
-          <button
-            onClick={() => navigate('/dashboard')}
-            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-md transition-colors"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold text-gray-900">{classItem.name}</h1>
-            <div className="flex items-center space-x-4 mt-2 text-gray-600">
-              <div className="flex items-center space-x-1">
-                <MapPin className="w-4 h-4" />
-                <span>{classItem.location}</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Calendar className="w-4 h-4" />
-                <span>Created {new Date(classItem.createdAt).toLocaleDateString()}</span>
-              </div>
+   <Layout>
+  <div className="space-y-6 px-4 sm:px-6 lg:px-8 py-4">
+    {/* Header */}
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => navigate('/dashboard')}
+          className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-md transition"
+        >
+          <ArrowLeft className="w-5 h-5" />
+        </button>
+        <div>
+          <h1 className="text-xl sm:text-2xl font-bold text-gray-900">{classItem.name}</h1>
+          <div className="flex flex-wrap items-center gap-3 text-sm text-gray-600 mt-1">
+            <div className="flex items-center gap-1">
+              <MapPin className="w-4 h-4" />
+              <span>{classItem.location}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <Calendar className="w-4 h-4" />
+              <span>Created {new Date(classItem.createdAt).toLocaleDateString()}</span>
             </div>
           </div>
-          <button
-            onClick={() => setIsCreateModalOpen(true)}
-            className="flex items-center space-x-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors"
-          >
-            <Plus className="w-5 h-5" />
-            <span>Add Entry</span>
-          </button>
         </div>
-
-        {entries && entries.length > 0 ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {entries.map((entry) => (
-              <DailyEntryCard
-                key={entry._id}
-                entry={entry}
-                onEdit={handleEditEntry}
-                onDelete={handleDeleteEntry}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <Calendar className="mx-auto h-16 w-16 text-gray-400 mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No daily entries yet</h3>
-            <p className="text-gray-600 mb-6">
-              Start documenting your class sessions by adding your first daily entry
-            </p>
-            <button
-              onClick={() => setIsCreateModalOpen(true)}
-              className="inline-flex items-center space-x-2 bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors"
-            >
-              <Plus className="w-5 h-5" />
-              <span>Add First Entry</span>
-            </button>
-          </div>
-        )}
-
-        <CreateDailyEntryModal
-          isOpen={isCreateModalOpen}
-          onClose={() => setIsCreateModalOpen(false)}
-          classId={id!}
-        />
-
-        <EditEntryModal
-          isOpen={!!editingEntry}
-          onClose={() => setEditingEntry(null)}
-          classId={id!}
-          entry={editingEntry}
-        />
       </div>
-    </Layout>
+
+      <button
+        onClick={() => setIsCreateModalOpen(true)}
+        className="flex items-center justify-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition w-full sm:w-auto"
+      >
+        <Plus className="w-5 h-5" />
+        <span>Add Entry</span>
+      </button>
+    </div>
+
+    {/* Daily Entries */}
+    {entries && entries.length > 0 ? (
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+        {entries.map((entry) => (
+          <DailyEntryCard
+            key={entry._id}
+            entry={entry}
+            onEdit={handleEditEntry}
+            onDelete={handleDeleteEntry}
+          />
+        ))}
+      </div>
+    ) : (
+      <div className="text-center py-12 px-4">
+        <Calendar className="mx-auto h-16 w-16 text-gray-400 mb-4" />
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">No daily entries yet</h3>
+        <p className="text-gray-600 text-sm mb-6">
+          Start documenting your class sessions by adding your first daily entry.
+        </p>
+        <button
+          onClick={() => setIsCreateModalOpen(true)}
+          className="inline-flex items-center justify-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition w-full sm:w-auto"
+        >
+          <Plus className="w-5 h-5" />
+          <span>Add First Entry</span>
+        </button>
+      </div>
+    )}
+
+    {/* Modals */}
+    <CreateDailyEntryModal
+      isOpen={isCreateModalOpen}
+      onClose={() => setIsCreateModalOpen(false)}
+      classId={id!}
+    />
+
+    <EditEntryModal
+      isOpen={!!editingEntry}
+      onClose={() => setEditingEntry(null)}
+      classId={id!}
+      entry={editingEntry}
+    />
+  </div>
+</Layout>
+
   );
 };
