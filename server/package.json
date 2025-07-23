@@ -2,8 +2,8 @@
   "name": "class-management-server",
   "version": "1.0.0",
   "scripts": {
-    "dev": "nodemon server.ts",
-    "start": "ts-node server.ts",
+    "dev": "nodemon index.ts",
+    "start": "ts-node index.ts",
     "build": "tsc"
   },
   "dependencies": {
