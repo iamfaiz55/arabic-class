@@ -15,7 +15,7 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-
+mongoose.connect(process.env.MONGODB_URI as string)
 // Middleware
 app.use(helmet());
 app.use(cors({
@@ -38,18 +38,14 @@ app.use('/api/classes', classRoutes);
 app.use(notFound);
 app.use(errorHandler);
 
-app.use((_, res)=> {
-   res.status(404).json({message:"Resource Not Found"})
-})
+
 // Database connection
-mongoose.connect(process.env.MONGODB_URI as string)
-  .then(() => {
+
+  mongoose.connection.once("open", ()=> {
+
     console.log('✅ Connected to MongoDB');
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
     });
   })
-  .catch((error) => {
-    console.error('❌ MongoDB connection error:', error);
-    process.exit(1);
-  });
+  

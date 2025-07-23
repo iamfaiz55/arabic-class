@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 
-export const notFound = (req: Request, res: Response, next: NextFunction) => {
-  const error = new Error(`Not found - ${req.originalUrl}`);
-  res.status(404);
-  next(error);
+export const notFound = (_: Request, res: Response, next: NextFunction) => {
+  // const error = new Error(`Not found - ${req.originalUrl}`);
+  res.status(404).json({message:"Resourse Not Found"});
+  next();
 };
 
 export const errorHandler = (err: any, _: Request, res: Response, ) => {
