@@ -113,7 +113,7 @@ export const getDailyEntries = asyncHandler(async (req: AuthRequest, res: Respon
 // @access  Private
 export const createDailyEntry = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { date, topic } = req.body;
-  const audioFile = req.file;
+  const files = req.files as { [fieldname: string]: Express.Multer.File[] };
 
   if (!date || !topic) {
     res.status(400);
@@ -131,37 +131,58 @@ export const createDailyEntry = asyncHandler(async (req: AuthRequest, res: Respo
     throw new Error('Class not found');
   }
 
-  let audioUrl = '';
-  let audioPublicId = '';
+  // Helper function to upload audio if present
+  const uploadAudioIfPresent = async (file?: Express.Multer.File) => {
+    if (!file) return { url: '', publicId: '' };
 
-  // Upload audio if provided
-  if (audioFile) {
-    if (audioFile.size > 15 * 1024 * 1024) {
-      res.status(400);
+    if (file.size > 15 * 1024 * 1024) {
       throw new Error('Audio file size cannot exceed 15MB');
     }
 
-    try {
-      const filename = `${Date.now()}-${req.params.id}`;
-      const uploadResult = await uploadAudio(audioFile.buffer, filename) as any;
-      audioUrl = uploadResult.secure_url;
-      audioPublicId = uploadResult.public_id;
-    } catch (error) {
-      res.status(500);
-      throw new Error('Failed to upload audio file');
+    const filename = `${Date.now()}-${req.params.id}`;
+    const result = await uploadAudio(file.buffer, filename) as any; // Make sure uploadAudio accepts buffer
+    return {
+      url: result.secure_url,
+      publicId: result.public_id,
+    };
+  };
+
+  // Initialize variables for audio URLs and public IDs
+  let audioUrl1 = '', audioPublicId1 = '';
+  let audioUrl2 = '', audioPublicId2 = '';
+
+  try {
+    if (files?.audio1?.[0]) {
+      const res1 = await uploadAudioIfPresent(files.audio1[0]);
+      console.log("resssss", res1);
+      
+      audioUrl1 = res1.url;
+      audioPublicId1 = res1.publicId;
     }
+    if (files?.audio2?.[0]) {
+      const res2 = await uploadAudioIfPresent(files.audio2[0]);
+      audioUrl2 = res2.url;
+      audioPublicId2 = res2.publicId;
+    }
+  } catch (err: any) {
+    res.status(500);
+    throw new Error(err.message || 'Failed to upload audio');
   }
 
+  // Create the DailyEntry with uploaded audio URLs and IDs
   const dailyEntry = await DailyEntry.create({
     classId: req.params.id,
     date: new Date(date),
     topic: topic.trim(),
-    audioUrl,
-    audioPublicId,
+    audioUrl1,
+    audioPublicId1,
+    audioUrl2,
+    audioPublicId2,
   });
 
   res.status(201).json(dailyEntry);
 });
+
 
 // @desc    Update daily entry
 // @route   PUT /api/classes/:id/entries/:entryId
